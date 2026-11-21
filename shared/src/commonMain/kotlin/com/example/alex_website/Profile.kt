@@ -20,13 +20,14 @@ object Profile {
     // TODO: write your own description.
     // Markdown: [text](url) is a link; a single line break is just a space, a blank line starts a new paragraph.
     const val ABOUT = """
-        I'm working on compiling Kotlin into WebAssembly. My focus is the performance of the generated binaries and support for new WebAssembly proposals.
-        I redesigned core data structures in the Kotlin/Wasm backend, implemented Kotlin coroutines on top of the Stack Switching 
+        I work on programming languages and compilers. Currently, I'm compiling Kotlin to WebAssembly.
+        My focus is the performance of the generated binaries and support for new WebAssembly proposals.
+        I redesigned core data structures in the Kotlin/Wasm backend, implemented Kotlin coroutines on top of the Stack Switching
         proposal, and worked on Kotlin/JavaScript interop.
 
-        Before that, in JetBrains Research, I applied static analysis techniques and binding-time analysis to make
-        [partial evaluation](https://www.sci.unich.it/hcvs24/papers/HCVS2024_paper_8.pdf) in Kanren languages family more efficient.
-        Later, I built Agentic Systems and Tools for [code generation](https://arxiv.org/pdf/2503.14183) in verification frameworks.
+        Before that, in JetBrains Research, I applied static and binding-time analysis to speed up
+        [partial evaluation](https://www.sci.unich.it/hcvs24/papers/HCVS2024_paper_8.pdf) in Kanren languages family,
+        and then designed agentic systems and tools for [code generation](https://arxiv.org/pdf/2503.14183) in verification frameworks. 
         
     """.trimIndent()
 
