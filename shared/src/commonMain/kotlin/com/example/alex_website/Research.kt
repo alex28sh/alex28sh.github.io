@@ -25,9 +25,9 @@ object Research {
             title = "Integration of Offline Partial Deduction and Functional Conversion for miniKanren",
             authors = listOf(Profile.NAME, "Ekaterina Verbitskaia"),
             venue = "HCVS 2024 (extended abstract)",
-            summary = "For many problems, verifying a solution is much easier than finding one. In a relational" +
+            summary = "For many problems, verifying a solution is much easier than finding one. In a relational " +
                 "language, a verifier can be run backwards as a solver, but naively this is slow. We combined mode " +
-                "and binding-time analyses with partial deduction and other program transformations to make such" +
+                "and binding-time analyses with partial deduction and other program transformations to make such " +
                 "solvers fast.",
             url = "https://www.sci.unich.it/hcvs24/papers/HCVS2024_paper_8.pdf",
             pdfUrl = "https://www.sci.unich.it/hcvs24/papers/HCVS2024_paper_8.pdf",
