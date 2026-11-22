@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mikepenz.markdown.compose.MarkdownElement
+import com.mikepenz.markdown.compose.components.markdownComponents
 import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownTypography
 import org.intellij.markdown.MarkdownTokenTypes
@@ -110,6 +111,7 @@ internal fun MarkdownBody(content: String, modifier: Modifier = Modifier) {
                 hoveredStyle = SpanStyle(background = colors.primary.copy(alpha = 0.15f)),
             ),
         ),
+        components = markdownComponents(codeFence = highlightedCodeFence),
         // The default layout puts a spacer before every node, including the EOL tokens between
         // paragraphs; instead, lay out only the real blocks, exactly one blank line apart.
         success = { state, components, modifier ->
