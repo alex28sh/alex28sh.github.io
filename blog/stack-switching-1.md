@@ -24,14 +24,14 @@ the execution of one's stack can be resumed later.
 
 Core instructions introduced by the proposal are:
 * `cont.new` - create a new suspended continuation (with a stack) from
-  a function reference. When first resumed, function will start execution with
-  the arguments given on stack.
+a function reference. When first resumed, function will start execution with
+the arguments given on stack.
 * `resume` - runs a continuation as a child of the current stack,
-  passing arguments and installing handlers for tags `(on $tag $label)`.
-  It executes until `return` or `suspend` instructions.
+passing arguments and installing handlers for tags `(on $tag $label)`.
+It executes until `return` or `suspend` instructions.
 * `suspend` - passes control to the nearest ancestor stack that
-  handles `$tag`. The handler receives a new continuation for the
-  suspended computation, which can be resumed later.
+handles `$tag`. The handler receives a new continuation for the
+suspended computation, which can be resumed later.
 
 ![A child stack is created, resumed, suspends back to its parent's handler, is resumed again, and returns.](images/stack-switching.png)
 
@@ -225,11 +225,11 @@ Suspension happens in the `yield` method, after it stores the next sequence valu
 
 ### This design eliminates the costs of the state machine transformation:
 * **Smaller binaries:** no generated classes for suspend functions, state dispatch,
-  or spilling per suspend function.
-  Optimized binaries for [KotlinConf App](https://github.com/jetbrains/kotlinconf-app) are 6% smaller.
+or spilling per suspend function.
+Optimized binaries for [KotlinConf App](https://github.com/jetbrains/kotlinconf-app) are 6% smaller.
 * **Less allocation:** calling a suspend function no longer allocates a continuation object.
 * **Real stack traces:** WebAssembly continuations preserve their stack, so
-  debuggers show the actual code chain.
+debuggers show the actual code chain.
 * **Lighter compilation:** mapping resume and suspend instructions does not require complicated program transformations and optimizations.
 
 ## What's next
