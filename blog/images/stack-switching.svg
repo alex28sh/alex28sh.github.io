@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="580" viewBox="0 0 860 580">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Helvetica Neue", Arial, sans-serif; fill: #2b2b2b; font-size: 14px; }
+      .h { font-size: 16px; font-weight: 600; }
+      .m { white-space: pre; font-family: "JetBrains Mono", "DejaVu Sans Mono", Menlo, monospace; font-size: 13.5px; }
+      .n { fill: #6b6b6b; font-size: 13px; }
+      .run { fill: #2f7a7a; }
+      .wait { fill: #ffffff; stroke: #9aa5a5; stroke-width: 1.5; stroke-dasharray: 4 3; }
+      .guide { stroke: #e4e4e4; stroke-width: 1; }
+      .fwd { stroke: #2f7a7a; stroke-width: 2; fill: none; }
+      .back { stroke: #c0612b; stroke-width: 2; fill: none; }
+      .ret { stroke: #777; stroke-width: 2; fill: none; }
+      .code { fill: #f3f4f4; stroke: #dde1e1; stroke-width: 1; }
+      .c { fill: #8a9494; }
+      .hot { fill: #c0612b; font-weight: 600; }
+      .new { stroke: #9aa5a5; stroke-width: 1.5; stroke-dasharray: 5 4; fill: none; }
+    </style>
+  </defs>
+  <rect width="860" height="580" fill="#ffffff"/>
+
+  <!-- lane headers -->
+  <text x="260" y="38" text-anchor="middle" class="h">parent stack</text>
+  <text x="560" y="38" text-anchor="middle" class="h">child stack <tspan class="m">k</tspan></text>
+  <line x1="260" y1="52" x2="260" y2="505" class="guide"/>
+  <line x1="560" y1="52" x2="560" y2="505" class="guide"/>
+
+  <!-- parent bar -->
+  <rect x="252" y="64"  width="16" height="106" class="run"/>
+  <rect x="252" y="170" width="16" height="100" class="wait"/>
+  <rect x="252" y="270" width="16" height="100" class="run"/>
+  <rect x="252" y="370" width="16" height="80"  class="wait"/>
+  <rect x="252" y="450" width="16" height="50"  class="run"/>
+
+  <!-- child bar -->
+  <rect x="552" y="110" width="16" height="60"  class="wait"/>
+  <rect x="552" y="170" width="16" height="100" class="run"/>
+  <rect x="552" y="270" width="16" height="100" class="wait"/>
+  <rect x="552" y="370" width="16" height="80"  class="run"/>
+
+  <!-- 1. cont.new -->
+  <line x1="270" y1="110" x2="546" y2="110" class="new" marker-end="url(#a)"/>
+  <text x="410" y="101" text-anchor="middle" class="m">cont.new $f</text>
+  <text x="580" y="115" class="n">created, not started</text>
+
+  <!-- 2. resume -->
+  <line x1="270" y1="170" x2="546" y2="170" class="fwd" marker-end="url(#a)"/>
+  <text x="410" y="161" text-anchor="middle" class="m">resume k (on $yield $h)</text>
+  <text x="240" y="224" text-anchor="end" class="n">waits in <tspan class="m">resume</tspan></text>
+
+  <!-- 3. suspend -->
+  <line x1="550" y1="270" x2="274" y2="270" class="back" marker-end="url(#a)"/>
+  <text x="410" y="261" text-anchor="middle" class="m">suspend $yield</text>
+  <text x="240" y="315" text-anchor="end" class="n">handler <tspan class="m">$h</tspan> gets the payload</text>
+  <text x="240" y="333" text-anchor="end" class="n">and continuation <tspan class="m">k′</tspan></text>
+  <text x="580" y="324" class="n">suspended, captured in <tspan class="m">k′</tspan></text>
+
+  <!-- 4. resume again -->
+  <line x1="270" y1="370" x2="546" y2="370" class="fwd" marker-end="url(#a)"/>
+  <text x="410" y="361" text-anchor="middle" class="m">resume k′</text>
+  <text x="240" y="414" text-anchor="end" class="n">waits in <tspan class="m">resume</tspan></text>
+
+  <!-- 5. return -->
+  <line x1="550" y1="450" x2="274" y2="450" class="ret" marker-end="url(#a)"/>
+  <text x="410" y="441" text-anchor="middle" class="m">return</text>
+  <text x="240" y="480" text-anchor="end" class="n"><tspan class="m">resume</tspan> returns</text>
+
+  <!-- body of $f, aligned with when it runs -->
+  <rect x="582" y="176" width="236" height="108" rx="6" class="code"/>
+  <text x="594" y="200" class="m">(func $f (param i32)</text>
+  <text x="594" y="226" class="m c">  ;; first part</text>
+  <text x="594" y="250" class="m c">  ...</text>
+  <text x="594" y="275" class="m hot">  (suspend $yield)</text>
+
+  <rect x="582" y="376" width="236" height="88" rx="6" class="code"/>
+  <text x="594" y="400" class="m c">  ;; continues here</text>
+  <text x="594" y="424" class="m c">  ...</text>
+  <text x="594" y="455" class="m">)<tspan class="c">  ;; returns</tspan></text>
+
+  <!-- legend -->
+  <rect x="220" y="534" width="14" height="14" class="run"/>
+  <text x="242" y="546" class="n">running</text>
+  <rect x="330" y="534" width="14" height="14" class="wait"/>
+  <text x="352" y="546" class="n">suspended / waiting</text>
+  <line x1="510" y1="541" x2="550" y2="541" class="fwd" marker-end="url(#a)"/>
+  <text x="558" y="546" class="n">switch to child</text>
+  <line x1="670" y1="541" x2="710" y2="541" class="back" marker-end="url(#a)"/>
+  <text x="718" y="546" class="n">to handler</text>
+</svg>
