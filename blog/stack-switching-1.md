@@ -139,7 +139,7 @@ The simplified produced code for the `visit` function will be as following:
 
 ```kotlin
 class VisitCOROUTINE(
-    val receiver: SequenceScope<Int>,
+    val scope: SequenceScope<Int>,
     val node: Node?,                            // spilled: still needed after visit(node.left)
     resultContinuation: Continuation<Unit>,     // the caller's continuation
 ) : CoroutineImpl(resultContinuation) {
@@ -194,14 +194,14 @@ a call to suspend functions from another suspend function
 is a regular Wasm `call`, executed on the coroutine's Wasm stack.
 
 This way, `visit` function keeps its original body.
-Only the `completion` argument is added.
+Only the `completion` argument is added and passed along to the calls.
 
 ```kotlin
 fun SequenceScope<Int>.visit(node: Node?, completion: Continuation<Unit>) {
     if (node == null) return
-    visit(node.left)
-    yield(node.value)
-    visit(node.right)
+    visit(node.left, completion)
+    yield(node.value, completion)
+    visit(node.right, completion)
 }
 ```
 
@@ -225,11 +225,11 @@ Suspension happens in the `yield` method, after it stores the next sequence valu
 
 ### This design eliminates the costs of the state machine transformation:
 * **Smaller binaries:** no generated classes for suspend functions, state dispatch,
-or spilling per suspend function.
-[Optimized binaries for [KotlinConf App](https://github.com/jetbrains/kotlinconf-app) are 6% smaller.]
+  or spilling per suspend function.
+  Optimized binaries for [KotlinConf App](https://github.com/jetbrains/kotlinconf-app) are 6% smaller.
 * **Less allocation:** calling a suspend function no longer allocates a continuation object.
 * **Real stack traces:** WebAssembly continuations preserve their stack, so
-debuggers show the actual code chain.
+  debuggers show the actual code chain.
 * **Lighter compilation:** mapping resume and suspend instructions does not require complicated program transformations and optimizations.
 
 ## What's next
@@ -243,10 +243,3 @@ In the next post, I'll compare Kotlin coroutines on *WasmFX* with the state mach
 compilation in **V8** and **Wasmtime**.
 
 [//]: # (`suspend` function modifiers in Kotlin delimit code into blocking and suspendable.)
-
-
-[//]: # ()
-[//]: # (This is the first post. Remove `draft: true` above to publish it.)
-
-[//]: # ()
-[//]: # (I'll write about compilers, WebAssembly, and Kotlin.)
