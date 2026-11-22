@@ -13,9 +13,10 @@ object Research {
             title = "Can LLMs Enable Verification in Mainstream Programming?",
             authors = listOf(Profile.NAME, "Igor Engel", "Stanislav Alekseev", "Daniil Berezun", "Ekaterina Verbitskaia", "Anton Podkopaev"),
             venue = "arXiv preprint, 2025",
-            summary = "We study whether LLMs can generate formally verified code in three verification languages — " +
-                "Dafny, Nagini, and Verus — using curated benchmarks derived from HumanEval, and what information " +
-                "the model needs to succeed.",
+            summary =
+                "Verifiers give LLMs precise feedback, so their output can be proven correct rather than just tested. " +
+                "We studied how well LLMs and agentic systems generate verified code in Dafny, Nagini, and Verus, " +
+                "using collected and existing benchmarks.",
             url = "https://arxiv.org/abs/2503.14183",
             pdfUrl = "https://arxiv.org/pdf/2503.14183",
             preview = Res.drawable.paper_verification,
@@ -24,9 +25,10 @@ object Research {
             title = "Integration of Offline Partial Deduction and Functional Conversion for miniKanren",
             authors = listOf(Profile.NAME, "Ekaterina Verbitskaia"),
             venue = "HCVS 2024 (extended abstract)",
-            summary = "Partial deduction and functional conversion speed up relational programs when the direction " +
-                "of a query is known. We integrate offline partial deduction with functional conversion and obtain " +
-                "larger speedups than either transformation alone.",
+            summary = "For many problems, verifying a solution is much easier than finding one. In a relational" +
+                "language, a verifier can be run backwards as a solver, but naively this is slow. We combined mode " +
+                "and binding-time analyses with partial deduction and other program transformations to make such" +
+                "solvers fast.",
             url = "https://www.sci.unich.it/hcvs24/papers/HCVS2024_paper_8.pdf",
             pdfUrl = "https://www.sci.unich.it/hcvs24/papers/HCVS2024_paper_8.pdf",
             preview = Res.drawable.paper_canren,
