@@ -40,6 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mikepenz.markdown.compose.MarkdownElement
 import com.mikepenz.markdown.compose.components.markdownComponents
+import com.mikepenz.markdown.compose.extendedspans.ExtendedSpans
+import com.mikepenz.markdown.compose.extendedspans.RoundedCornerSpanPainter
+import com.mikepenz.markdown.model.markdownExtendedSpans
 import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownTypography
 import org.intellij.markdown.MarkdownTokenTypes
@@ -104,6 +107,10 @@ internal fun MarkdownBody(content: String, modifier: Modifier = Modifier) {
             h1 = heading.copy(fontSize = 26.sp, lineHeight = 34.sp),
             h2 = heading.copy(fontSize = 22.sp, lineHeight = 30.sp),
             h3 = heading.copy(fontSize = 18.sp, lineHeight = 26.sp),
+            // h4–h6 are lead-ins rather than section titles: body size or just above, set apart by weight.
+            h4 = heading.copy(fontSize = 17.sp, lineHeight = 26.sp, fontWeight = FontWeight.SemiBold),
+            h5 = heading.copy(fontSize = 16.sp, lineHeight = 26.sp, fontWeight = FontWeight.SemiBold),
+            h6 = heading.copy(fontSize = 16.sp, lineHeight = 26.sp, fontWeight = FontWeight.SemiBold, color = colors.onSurfaceVariant),
             code = TextStyle(fontFamily = FontFamily.Monospace, fontSize = 14.sp, lineHeight = 22.sp, color = colors.onBackground),
             textLink = TextLinkStyles(
                 // Always underlined: the accent alone is too close to the body text color (≈1.5:1 in dark theme).
@@ -112,6 +119,20 @@ internal fun MarkdownBody(content: String, modifier: Modifier = Modifier) {
             ),
         ),
         components = markdownComponents(codeFence = highlightedCodeFence),
+        // Inline `code` backgrounds would otherwise fill the whole 26sp line, so boxes on
+        // consecutive lines touch. Draw them ourselves, trimmed to the text height.
+        extendedSpans = markdownExtendedSpans {
+            remember {
+                ExtendedSpans(
+                    RoundedCornerSpanPainter(
+                        cornerRadius = 4.sp,
+                        padding = RoundedCornerSpanPainter.TextPaddingValues(horizontal = 0.sp, vertical = 0.sp),
+                        topMargin = 2.sp,
+                        bottomMargin = 2.sp,
+                    )
+                )
+            }
+        },
         // The default layout puts a spacer before every node, including the EOL tokens between
         // paragraphs; instead, lay out only the real blocks, exactly one blank line apart.
         success = { state, components, modifier ->
