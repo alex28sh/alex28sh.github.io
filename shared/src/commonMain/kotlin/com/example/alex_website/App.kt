@@ -14,45 +14,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 
-enum class Page(val title: String) {
-    About("About me"),
-    Cv("CV"),
-    Blog("Blog"),
-    Research("Research"),
-}
-
 @Composable
 fun App() {
     val systemDark = isSystemInDarkTheme()
     var darkOverride by remember { mutableStateOf<Boolean?>(null) }
     val dark = darkOverride ?: systemDark
-    var page by remember { mutableStateOf(Page.About) }
+    var route by remember { mutableStateOf<Route>(Route.About) }
+    val scroll = rememberScrollState()
+    // Every navigation starts at the top of the page.
+    LaunchedEffect(route) { scroll.scrollTo(0) }
     val uriHandler = LocalUriHandler.current
 
     SiteTheme(dark) {
         val colors = MaterialTheme.colorScheme
         Column(Modifier.fillMaxSize().background(colors.background)) {
             Header(
-                current = page,
+                current = route.tab,
                 dark = dark,
                 onToggleTheme = { darkOverride = !dark },
-                onNavigate = {
-                    if (it == Page.Cv) uriHandler.openUri(Profile.CV_URL) else page = it
+                onNavigate = { page ->
+                    when (val target = page.route) {
+                        null -> uriHandler.openUri(Profile.CV_URL)  // CV is a PDF, not a page
+                        else -> route = target
+                    }
                 },
             )
             HorizontalDivider(color = colors.outlineVariant)
             Box(
-                Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+                Modifier.fillMaxSize().verticalScroll(scroll),
                 contentAlignment = Alignment.TopCenter,
             ) {
                 SelectionContainer {
                     Column(
                         Modifier.widthIn(max = 860.dp).fillMaxWidth().padding(horizontal = 20.dp, vertical = 40.dp),
                     ) {
-                        when (page) {
-                            Page.About, Page.Cv -> AboutPage()
-                            Page.Blog -> EmptyPage("Blog", "No posts yet.")
-                            Page.Research -> ResearchPage()
+                        when (val r = route) {
+                            Route.About -> AboutPage()
+                            Route.Research -> ResearchPage()
+                            Route.BlogList -> BlogPage(onOpen = { route = Route.Post(it.slug) })
+                            is Route.Post -> BlogPostPage(r.slug, onBack = { route = Route.BlogList })
                         }
                     }
                 }

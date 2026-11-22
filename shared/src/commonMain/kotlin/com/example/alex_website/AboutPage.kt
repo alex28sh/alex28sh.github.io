@@ -16,17 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mikepenz.markdown.compose.MarkdownElement
-import com.mikepenz.markdown.m3.Markdown
-import com.mikepenz.markdown.m3.markdownTypography
 import kotlinx.coroutines.delay
-import org.intellij.markdown.MarkdownTokenTypes
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -51,29 +44,7 @@ internal fun AboutPage() {
         Text(Profile.LOCATION, fontSize = 15.sp, color = colors.onSurfaceVariant)
     }
     Spacer(Modifier.height(24.dp))
-    val bodyText = TextStyle(fontSize = 16.sp, lineHeight = 26.sp, color = colors.onBackground)
-    Markdown(
-        Profile.ABOUT,
-        modifier = Modifier.fillMaxWidth(),
-        typography = markdownTypography(
-            paragraph = bodyText,
-            text = bodyText,
-            textLink = TextLinkStyles(
-                // Always underlined: the accent alone is too close to the body text color (≈1.5:1 in dark theme).
-                style = SpanStyle(color = colors.primary, fontWeight = FontWeight.SemiBold),
-                hoveredStyle = SpanStyle(background = colors.primary.copy(alpha = 0.15f)),
-            ),
-        ),
-        // The default layout puts a spacer before every node, including the EOL tokens between
-        // paragraphs; instead, lay out only the real blocks, exactly one blank line apart.
-        success = { state, components, modifier ->
-            Column(modifier, verticalArrangement = Arrangement.spacedBy(26.dp)) {
-                state.node.children
-                    .filter { it.type != MarkdownTokenTypes.EOL }
-                    .forEach { MarkdownElement(it, components, state.content, includeSpacer = false) }
-            }
-        },
-    )
+    MarkdownBody(Profile.ABOUT)
     Spacer(Modifier.height(28.dp))
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
